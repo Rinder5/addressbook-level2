@@ -38,7 +38,11 @@ public class Main {
     /** Runs the program until termination.  */
     public void run(String[] launchArgs) {
         start(launchArgs);
-        runCommandLoopUntilExitCommand();
+        try {
+            runCommandLoopUntilExitCommand();
+        } catch(exception e) {
+        	System.out.println("Something went wrong. Exiting the program now.");
+        }
         exit();
     }
 
