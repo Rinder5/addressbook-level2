@@ -12,8 +12,9 @@ public class Address {
     public static final String MESSAGE_ADDRESS_CONSTRAINTS = "Person addresses can be in any format";
     public static final String ADDRESS_VALIDATION_REGEX = ".+";
 
-    public final String value;
+    public Object[] values;
     private boolean isPrivate;
+    public int hashCode;
 
     /**
      * Validates given address.
@@ -26,7 +27,12 @@ public class Address {
         if (!isValidAddress(trimmedAddress)) {
             throw new IllegalValueException(MESSAGE_ADDRESS_CONSTRAINTS);
         }
-        this.value = trimmedAddress;
+        hashCode = trimmedAddress.hashCode();
+        String[] addressSegments = trimmedAddress.split(", ");
+        values[0] = new Block(addressSegments[0]);
+        values[1] = new Street(addressSegments[1]);
+        values[2] = new Unit(addressSegments[2]);
+        values[3] = new PostalCode(addressSegments[3]);
     }
 
     /**
@@ -38,19 +44,24 @@ public class Address {
 
     @Override
     public String toString() {
-        return value;
+    	String addressString = values[0].toString();
+    	for (int i=1; i<values.length; i++){
+            addressString += ", ";
+            addressString += values[i].toString();
+    	}
+        return addressString;
     }
 
     @Override
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof Address // instanceof handles nulls
-                && this.value.equals(((Address) other).value)); // state check
+                && this.hashCode == ((Address) other).hashCode()); // state check
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return this.hashCode;
     }
 
     public boolean isPrivate() {
