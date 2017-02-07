@@ -18,20 +18,25 @@ public class UtilsTest {
         assertFalse(Utils.isAnyNull(new Object(), new Object()));
         assertFalse(Utils.isAnyNull("test"));
         assertFalse(Utils.isAnyNull(""));
+        assertFalse(Utils.isAnyNull(1));
 
         // non empty list with just one null at the beginning
         assertTrue(Utils.isAnyNull((Object) null));
         assertTrue(Utils.isAnyNull(null, "", new Object()));
         assertTrue(Utils.isAnyNull(null, new Object(), new Object()));
-
+        assertTrue(Utils.isAnyNull(null, 1));
+        
         // non empty list with nulls in the middle
         assertTrue(Utils.isAnyNull(new Object(), null, null, "test"));
         assertTrue(Utils.isAnyNull("", null, new Object()));
-
+        assertTrue(Utils.isAnyNull(1, null, 1));
+        assertTrue(Utils.isAnyNull(1, null, ""));
+        
         // non empty list with one null as the last element
         assertTrue(Utils.isAnyNull("", new Object(), null));
         assertTrue(Utils.isAnyNull(new Object(), new Object(), null));
-
+        assertTrue(Utils.isAnyNull(1, null));
+        
         // confirms nulls inside the list are not considered
         List<Object> nullList = Arrays.asList((Object) null);
         assertFalse(Utils.isAnyNull(nullList));
@@ -47,19 +52,25 @@ public class UtilsTest {
         assertAreUnique(1);
         assertAreUnique("");
         assertAreUnique("abc");
+        assertAreUnique(new Integer(1));
 
         // all objects unique
         assertAreUnique("abc", "ab", "a");
         assertAreUnique(1, 2);
+        assertAreUnique("", "abc");
+        assertAreUnique(null, new Integer(1));
+        assertAreUnique(null, "");
 
         // some identical objects
         assertNotUnique("abc", "abc");
         assertNotUnique("abc", "", "abc", "ABC");
         assertNotUnique("", "abc", "a", "abc");
+        assertNotUnique("", "", "");
         assertNotUnique(1, new Integer(1));
         assertNotUnique(null, 1, new Integer(1));
         assertNotUnique(null, null);
         assertNotUnique(null, "a", "b", null);
+        assertNotUnique(null, "a", "a");
     }
 
     private void assertAreUnique(Object... objects) {
