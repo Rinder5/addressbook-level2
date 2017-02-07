@@ -60,11 +60,21 @@ public class Name {
         return fullName.hashCode();
     }
 
+    /**
+     * Returns true of the other name is very similar to this name.
+     * Two names are considered similar if they are the same object;
+     *                                  if their fullName value matches;
+     *                                  or if their name is a subset/superset of the other name
+     */
     public boolean isSimilar(Name other){
         if (other.equals(this)){
             return true;
         } else if (other.toString().equalsIgnoreCase(this.toString())){
             return true;
+        } else if (other.toString().contains(this.toString()) ||
+                   this.toString().contains(other.toString())){
+            return true;
+        }
         return false;
     }
 }
